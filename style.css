@@ -1,8 +1,22 @@
 /* Global resources */
 :root {
-    --font-color: #363f5f
-}
+    --font-color: #363f5f;
+    --header: #7209B7;
+    --bg: #f0f2f5;
+    --primary-color: #fff;
+    -footer: #000;
 
+    --red: #E92929;
+    --dark-green: #49AA26;
+    --light-green: #13D510;
+}
+.dark-theme {
+    --bg: #202024;
+    --font-color: #fff;
+    --footer: #fff;
+    --header: #121214;
+    --primary-color: #1c1c1c;
+}
 * {
     margin: 0;
     padding: 0;
@@ -15,9 +29,10 @@ a{
     text-decoration: none;
 }
 body {
-    background: #f0f2f5;
+    background: var(--bg);
     font-family: "Poppins", sans-serif;
 }
+
 .conteiner {
     width: min(90vw, 800px);
     margin: auto;
@@ -36,13 +51,13 @@ body {
 
 /* Links and Buttons*/
 .button.new {
-    color: #3DD705;
+    color: var(--light-green);
     display: inline-block;
     margin-bottom: 0.8rem;
     transition: 0.25s;
 }
 .button.new:hover{
-    color: #49AA26; 
+    color: var(--dark-green); 
 }
 button {
     width: 100%;
@@ -51,7 +66,7 @@ button {
     border: none;
 
     color: white;
-    background: #3DD705;
+    background: var(--light-green);
     padding: 0;
 
     cursor: pointer;
@@ -59,11 +74,11 @@ button {
     transition: 0.2s;
 }
 button:hover{
-    background: #49AA26;
+    background: var(--dark-green);
 }
 .button.cancel {
-    color: #E92929;
-    border: 2px #E92929 solid;
+    color: var(--red);
+    border: 2px var(--red) solid;
 
     height: 50px;
 
@@ -75,7 +90,7 @@ button:hover{
 }
 .button.cancel:hover{
     opacity: 1;
-    background: #E92929;
+    background: var(--red);
     color: white;
 }
 
@@ -89,14 +104,10 @@ h2 {
 
 /* Header */
 header {
-    background: #2D4A22;
+    background: var(--header);
     padding: 2rem 0rem 10rem;
     text-align: center;
 
-}
-#logo {
-    color: #ffff;
-    font-weight: 100;    
 }
 
 /* Balance */
@@ -111,7 +122,7 @@ header {
 
 /* Cards */
 .card-money{
-    background: white;
+    background: var(--primary-color);
     padding: 1.5rem 2rem;
     border-radius: 0.25rem;
     margin-bottom: 2rem;
@@ -131,16 +142,17 @@ header {
 }
 
 .card-money.total {
-    background: #49AA26;
+    background: var(--light-green);
     color: white;
 }
 .card-money.total.negative {
-    background: #E92929;
+    background: var(--red);
 }
 /* Table */
 #transaction-table{
     display: block;
     overflow-x: auto;
+    min-height: 337.5px;
 }
 
 #data-table {
@@ -163,14 +175,14 @@ table tbody tr:hover{
     opacity: 1;
 }
 table th {
-    background: white;
+    background: var(--primary-color);
     font-weight: normal;
     padding: 1rem 2rem;
     text-align: left;
     color: #7D8195;
 }
 table td {
-    background: white;
+    background: var(--primary-color);
     padding: 1rem 2rem;
     font-weight: normal;
 }
@@ -179,7 +191,7 @@ td.transaction-description, td.transaction-date{
     color: var(--font-color)
 }
 td.expense{
-    color: #E92929
+    color: var(--red)
 }
 td.income{
     color: #12A454
@@ -206,7 +218,7 @@ td.income{
 }
 
 .modal{
-    background: #f0f0f5;
+    background: var(--bg);
     padding: 2.4rem;
     width: 90%;
     max-width: 500px;
@@ -216,13 +228,12 @@ td.income{
 }
 
 /* Form */
-#form {
-    
-}
 #form h2 {
     margin-top: 0;
 }
 input {
+    background: var(--primary-color);
+    color: var(--font-color);
     border: none;
     border-radius: 0.2rem;
     padding: 0.8rem;
@@ -233,6 +244,7 @@ input {
 }
 
 #form small {
+    color: var(--footer);
     opacity: 0.4;
 }
 
@@ -250,7 +262,7 @@ input {
 footer {
     text-align: center;
     padding: 4rem 0 2rem;
-    color: var(--font-color);
+    color: var(--footer);
     opacity: 0.6; 
 }
 footer a img {
@@ -270,4 +282,60 @@ footer a img {
         gap: 2rem
     }
 
+}
+/* Switch */
+.switch {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+}
+
+input[type=checkbox]{
+	height: 0;
+	width: 0;
+	visibility: hidden;
+}
+
+label {
+	cursor: pointer;
+	text-indent: -9999px;
+	width: 52px;
+	height: 27px;
+	background: grey;
+	float: right;
+	border-radius: 100px;
+	position: relative;
+}
+
+label:after {
+	content: '';
+	position: absolute;
+    top: 2.5px;
+    left: 3px;
+	width: 22px;
+	height: 22px;
+	background: #fff;
+	border-radius: 50%;
+	transition: 0.15s;
+}
+
+input:checked + label {
+	background: #1782FF;
+}
+
+input:checked + label:after {
+	left: 49px;
+	transform: translateX(-100%);
+}
+
+label:active:after {
+	width: 45px;
+}
+
+html.transition,
+html.transition *,
+html.transition *:before,
+html.transition *:after {
+  transition: all 350ms;
+  transition-delay: 0;
 }

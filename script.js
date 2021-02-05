@@ -37,28 +37,28 @@ const StorageInterface = {
 const Transaction = {
     all: StorageInterface.get(),
     add(transaction){
-        Transaction.all.push(transaction)
+        this.all.push(transaction)
         App.reload()
     },
     remove (index) {
-        Transaction.all.splice(index, 1)
+        this.all.splice(index, 1)
         App.reload()
     },
     incomes() {
         let income = 0
-        Transaction.all.map(element => {if(element.amount > 0){income += element.amount}})
+        this.all.map(element => {if(element.amount > 0){income += element.amount}})
         return income
     },
     expenses() {
         let expense = 0
-        Transaction.all.map(element => {if(element.amount < 0){
+        this.all.map(element => {if(element.amount < 0){
             expense += element.amount
         }})
         return expense
     },
     total() {
         let total = 0
-        total = Transaction.incomes() + Transaction.expenses()
+        total = this.incomes() + this.expenses()
         return total
     }
 }
@@ -133,7 +133,7 @@ const Form = {
         return {
             description : this.description.value,
             amount : this.amount.value,
-            date : Form.date.value
+            date : this.date.value
         }
     },
     validateFields () {
