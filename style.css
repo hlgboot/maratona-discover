@@ -134,7 +134,9 @@ header {
     background: #49AA26;
     color: white;
 }
-
+.card-money.total.negative {
+    background: #E92929;
+}
 /* Table */
 #transaction-table{
     display: block;
@@ -144,7 +146,7 @@ header {
 #data-table {
     color: #969cb3;
     width: 100%;
-    border-spacing: 0 0.5rem; 
+    border-spacing: 0 0.5rem;
 }
 table thead tr th:last-child, table tbody tr td:last-child{
     border-radius:  0 0.25rem 0.25rem 0;    
@@ -254,6 +256,7 @@ footer {
 footer a img {
     margin-top: 0.5rem;
     width: 1.5rem;
+    height: 1.5rem;
 }
 
 /* Responsive */
