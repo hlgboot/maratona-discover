@@ -13,7 +13,7 @@
 <body>
     <div class="switch">
         <input type="checkbox" id="themeSwitch"></input>
-        <label for="themeSwitch"></label>
+        <label for="themeSwitch" id="switch-label"></label>
     </div>
     <header>
         <img src="./assets/logo.svg" alt="Logo Dev Finance">
@@ -52,8 +52,14 @@
 
         <section id="transaction">
             <h2 class="sr-only">Transações</h2>
+            <div class="transaction-header">
+                <a href="#" class="button new">+ Nova Transação</a>
+                <div class="features">
+                    <button id="filter"><img src="./assets//filter.svg" alt="" ></button>
+                    <button id="down"><img src="./assets/down.svg" alt="" ></button> 
+                </div>
 
-            <a href="#" class="button new">+ Nova Transação</a>
+            </div>
 
             <div id="transaction-table">
                 <table id="data-table">
@@ -73,7 +79,7 @@
         </section>
     </main>
 
-    <div class="modal-overlay">
+    <div class="modal-overlay" id="newTransactionModal">
         <div class="modal">
             <div id="form">
                 <h2>Nova Transação</h2>
@@ -96,8 +102,41 @@
                     </div>
 
                     <div class="input-group action">
-                        <a href="#" class="button cancel">Cancelar</a>
+                        <a href="#" class="button cancel" id="transactionCancel">Cancelar</a>
                         <button>Salvar</button>
+                    </div> 
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="filterModal">
+        <div class="modal">
+            <div id="form">
+                <h2>Filtro</h2>
+                <form action="" onsubmit="Filter.submit(event)">
+                    <div class="input-group options">
+                        <span>
+                            <button type="button" class="option" id="filterIncome">Entradas</button>
+                        </span>
+                        <span>
+                            <button type="button" class="option activated" id="filterAll">Ambas</button>
+                        </span>
+                        <span>
+                            <button type="button" class="option" id="filterExpense">Saídas</button>
+                        </span>
+                    </div>
+                    <div class="input-group">
+                        <label for="initial-date" class="filter-label">Data de ínicio</label>
+                        <input type="date" id="initial-date" name="initial-date" max="2999-01-01">
+                    </div>
+                    <div class="input-group">
+                        <label for="finish-date" class="filter-label">Data de termino</label>
+                        <input type="date" id="finish-date" name="finish-date" max="2999-01-01">
+                    </div>
+                    <div class="input-group action">
+                        <a href="#" class="button cancel" id="filterCancel">Cancelar</a>
+                        <button type="submit">Salvar</button>
                     </div> 
                 </form>
             </div>
@@ -106,7 +145,7 @@
 
     <footer>
         <p>dev.finance$</p>
-        <a href="https://github.com/hlgboot/maratona-discover"><img src="./assets/github.png"></a>
+        <a href="https://github.com/hlgboot/maratona-discover"><img class="git-icon"></a>
     </footer>
 
     <script src="./theme.js"></script>

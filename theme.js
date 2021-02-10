@@ -1,6 +1,11 @@
 const changeThemeSwitch = document.querySelector("#themeSwitch")
 const html = document.querySelector("html")
 
+const gitIcon = document.querySelector(".git-icon")
+const changeIcons = (theme) => {
+    theme ? gitIcon.src = "assets/githubLight.png" : gitIcon.src = "assets/github.png"  
+}
+
 const trans = () => {
     document.documentElement.classList.add('transition');
     window.setTimeout(() => {
@@ -10,11 +15,13 @@ const trans = () => {
 
 const darkMode = (theme) => {
     trans()
+    changeIcons(theme)
     html.classList.add(theme)
     localStorage.setItem("theme", JSON.stringify(theme))
 }
 const lightMode = () => {
     trans()
+    changeIcons()
     html.classList.remove("dark-theme")
     localStorage.setItem("theme", null)
 }

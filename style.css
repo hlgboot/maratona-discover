@@ -4,7 +4,7 @@
     --header: #7209B7;
     --bg: #f0f2f5;
     --primary-color: #fff;
-    -footer: #000;
+    --footer: #000;
 
     --red: #E92929;
     --dark-green: #49AA26;
@@ -60,6 +60,7 @@ body {
     color: var(--dark-green); 
 }
 button {
+    font-family: "Poppins";
     width: 100%;
     height: 50px;
 
@@ -152,7 +153,7 @@ header {
 #transaction-table{
     display: block;
     overflow-x: auto;
-    min-height: 337.5px;
+    min-height: 240px;
 }
 
 #data-table {
@@ -296,18 +297,19 @@ input[type=checkbox]{
 	visibility: hidden;
 }
 
-label {
+#switch-label {
 	cursor: pointer;
 	text-indent: -9999px;
 	width: 52px;
 	height: 27px;
-	background: grey;
+	background: #ccc;
 	float: right;
 	border-radius: 100px;
 	position: relative;
+    transition: 0.3s;
 }
 
-label:after {
+#switch-label:after {
 	content: '';
 	position: absolute;
     top: 2.5px;
@@ -316,26 +318,82 @@ label:after {
 	height: 22px;
 	background: #fff;
 	border-radius: 50%;
-	transition: 0.15s;
+	transition: 0.3s;
 }
 
-input:checked + label {
+input:checked + #switch-label {
 	background: #1782FF;
 }
 
-input:checked + label:after {
+input:checked + #switch-label:after {
 	left: 49px;
 	transform: translateX(-100%);
 }
 
-label:active:after {
-	width: 45px;
-}
 
 html.transition,
 html.transition *,
 html.transition *:before,
 html.transition *:after {
-  transition: all 350ms;
+  transition: all 250ms;
   transition-delay: 0;
+}
+
+/* Features */
+
+.transaction-header {
+    display: flex;
+    justify-content: space-between;
+}
+.features {
+    height: 30px;
+    width: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.features button {
+    margin: 0;
+    padding: 0;
+    background: none;
+    width: 30px;
+    height: 30px;
+    border-radius: 2px;
+}
+.features button:hover {
+    background: #ccc;
+}
+
+/* Filter Modal */
+
+.input-group.options{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    margin-bottom: 1.4rem;
+}
+
+.option {
+    opacity: 0.5;    
+    height: 50px;
+    background: none;
+    color: var(--font-color);
+    border-bottom: 5px solid #ccc;
+    transition: 0.25s;    
+}
+.option:hover {
+    opacity: 1;
+    background: var(--primary-color);
+}
+
+.option.activated {
+    border-bottom: 5px solid #1782FF;
+    background: var(--primary-color);
+    opacity: 1;
+}
+#initial-date, #finish-date {
+    margin-top: 0.8rem;
+}
+
+label.filter-label {
+    color: var(--font-color);
 }
