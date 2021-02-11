@@ -19,24 +19,27 @@ const totalDisplay = document.querySelector("#totalDisplay")
 
 const card = document.querySelector(".total")
 
-const toggleModal = () => {
+const toggles = {
+    toggleModal () {
     transactionModal.classList.toggle("active")
-}
-buttonCancel.addEventListener("click", toggleModal)
-buttonNew.addEventListener("click", toggleModal)
-
-const toggleFilterModal = () => {
+    },
+    toggleFilterModal () {
     filterModal.classList.toggle("active")
-}
-filterCancel.addEventListener("click", toggleFilterModal)
-filterButton.addEventListener("click", toggleFilterModal)
-
-const toggleFilterTypeOption = (type) => {
+    },
+    toggleFilterTypeOption (type) {
     const desactiveTypes = filterTypeOptions.filter(element => element !== type)
     desactiveTypes.map(e => e.classList.remove("activated"))
     type.classList.add("activated")
+    }
 }
-filterTypeOptions.map(e => e.addEventListener("click", e => {toggleFilterTypeOption(e.target)}))
+
+buttonCancel.addEventListener("click", toggles.toggleModal)
+buttonNew.addEventListener("click", toggles.toggleModal)
+
+filterCancel.addEventListener("click", toggles.toggleFilterModal)
+filterButton.addEventListener("click", toggles.toggleFilterModal)
+
+filterTypeOptions.map(e => e.addEventListener("click", e => {toggles.toggleFilterTypeOption(e.target)}))
 
 const Card = {
     negative (){
@@ -47,6 +50,10 @@ const Card = {
     }
     
 } 
+
+const deafultDataFilter = {
+    type: 'filterAll',
+}
 
 const StorageInterface = {
     get(){
@@ -60,6 +67,12 @@ const StorageInterface = {
     },
     setLastId (id) {
         localStorage.setItem("lastID", JSON.stringify(id))
+    },
+    getDataType () {
+        return JSON.parse(localStorage.getItem("dataFilter")) || deafultDataFilter
+    },
+    setDataType (data) {
+        localStorage.setItem("dataFilter", JSON.stringify(data))
     }
 }
 
@@ -82,21 +95,21 @@ const Transaction = {
         this.all = this.all.filter(element => element.id !== index)
         App.reload()
     },
-    incomes() {
+    incomes(data) {
         let income = 0
-        this.all.map(element => {if(element.amount > 0){income += element.amount}})
+        data.map(element => {if(element.amount > 0){income += element.amount}})
         return income
     },
-    expenses() {
+    expenses(data) {
         let expense = 0
-        this.all.map(element => {if(element.amount < 0){
+        data.map(element => {if(element.amount < 0){
             expense += element.amount
         }})
         return expense
     },
-    total() {
+    total(data) {
         let total = 0
-        total = this.incomes() + this.expenses()
+        total = (this.incomes(data)) + (this.expenses(data))
         return total
     }
 }
@@ -123,15 +136,15 @@ const DOM = {
             </td>`
         return html    
     },
-    updateBalance () {
-        incomeDisplay.innerHTML = Utils.formatCurrency(Transaction.incomes())
-        expenseDisplay.innerHTML = Utils.formatCurrency(Transaction.expenses())
-        if(Transaction.total() < 0 && !card.classList.contains("negative")){
+    updateBalance (data) {
+        incomeDisplay.innerHTML = Utils.formatCurrency(Transaction.incomes(data))
+        expenseDisplay.innerHTML = Utils.formatCurrency(Transaction.expenses(data))
+        if(Transaction.total(data) < 0 && !card.classList.contains("negative")){
             Card.negative()
         }else{
             Card.positive()
         }
-        totalDisplay.innerHTML = Utils.formatCurrency(Transaction.total())
+        totalDisplay.innerHTML = Utils.formatCurrency(Transaction.total(data))
     },
     clearTransactions () {
         DOM.trasnsactionsConteiner.innerHTML = ""
@@ -211,7 +224,7 @@ const Form = {
             const data = this.formatData()
             this.clearFields()
             this.saveTransaction(data)
-            toggleModal() 
+            toggles.toggleModal() 
         } catch (error) {
             alert(error.message)
         }
@@ -243,44 +256,58 @@ const Filter = {
         }
         return filtered
     },
-    clearFilterFields () {
-        console.log("cheguei aqui")
-        document.querySelector("#initial-date").value = ""
-        document.querySelector("#finish-date").value = ""
-        toggleFilterTypeOption(filterAllOption)
-        
-    },
     filterTransactions () {
-        const { initialDate, finishDate } = Filter
-        //StorageInterface.setFilter({type, date})
-        let filtered = this.filterType(Filter.currentType())
-        filtered = this.filterDate(filtered, initialDate(), finishDate())
+        const data = StorageInterface.getDataType()
+
+        let filtered = this.filterType(data.type)
+        filtered = this.filterDate(filtered, data.initialDate, data.finishDate)
+
         return filtered
+    },
+    newFilterData () {
+        const data = {
+            type: Filter.currentType(),
+            initialDate: Filter.initialDate(),
+            finishDate: Filter.finishDate()
+        }
+
+        return data
     },
     submit (event) {
         event.preventDefault()
         try {
-            const data =this.filterTransactions()
-            this.clearFilterFields()
-            toggleFilterModal()
+            const data =this.newFilterData()
+            StorageInterface.setDataType(data)
+            App.reload()
+
+            toggles.toggleFilterModal()
         } catch (error) {
             alert(error.message)
+            console.log(error)
         }
     }
 }
 
 const App = {
     init () {
-        Transaction.all.map((element, index) => DOM.addTransaction(element, index))
-        DOM.updateBalance()
-
         StorageInterface.set(Transaction.all)
+
+        const data = App.runFilter()
+        data.map((element, index) => DOM.addTransaction(element, index))
+
+        DOM.updateBalance(data)
+
     },
     reload () {
         DOM.clearTransactions()
 
         App.init()
-    }
+    },
+    runFilter () {
+        const data = Filter.filterTransactions()
+        return data
+    },
+
 }
 
 
