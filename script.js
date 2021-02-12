@@ -145,6 +145,7 @@ const DOM = {
         const data = DOM.innerHTMLFilter()
         divElement.innerHTML = data
         
+        DOM.removeFilter()
         DOM.filterDisplay.appendChild(divElement)
     },
     innerHTMLFilter () {
@@ -155,6 +156,9 @@ const DOM = {
         <a href="#" onclick="Filter.setNull()"><img src="./assets/filterDesactive.svg" alt=""></a>
         `
         return html
+    },
+    removeFilter () {
+        DOM.filterDisplay.innerHTML = ""
     },
     updateBalance (data) {
         incomeDisplay.innerHTML = Utils.formatCurrency(Transaction.incomes(data))
@@ -258,7 +262,7 @@ const Filter = {
 
     setNull () {
         StorageInterface.setDataType(deafultDataFilter)
-        DOM.filterDisplay.innerHTML = ""
+        DOM.removeFilter()
         App.reload()
     },
     filterType (type) {
