@@ -145,7 +145,6 @@ const DOM = {
         const data = DOM.innerHTMLFilter()
         divElement.innerHTML = data
         
-        DOM.removeFilter()
         DOM.filterDisplay.appendChild(divElement)
     },
     innerHTMLFilter () {
@@ -288,7 +287,10 @@ const Filter = {
     filterTransactions () {
         const data = StorageInterface.getDataType()
         if(JSON.stringify(data) !== JSON.stringify(deafultDataFilter)){
+            DOM.removeFilter()
             DOM.addFilter()
+        }else {
+            DOM.removeFilter()
         }
         let filtered = this.filterType(data.type)
         filtered = this.filterDate(filtered, data.initialDate, data.finishDate)
