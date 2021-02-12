@@ -12,6 +12,7 @@ const filterTypeOptions = [filterIncomeOption, filterAllOption, filterExpenseOpt
 
 const transactionModal = document.querySelector("#newTransactionModal")
 const filterModal = document.querySelector("#filterModal")
+const editModal = document.querySelector("#editTransactionModal")
 
 const expenseDisplay = document.querySelector("#expenseDisplay")
 const incomeDisplay = document.querySelector("#incomeDisplay")
@@ -21,15 +22,18 @@ const card = document.querySelector(".total")
 
 const toggles = {
     toggleModal () {
-    transactionModal.classList.toggle("active")
+        transactionModal.classList.toggle("active")
     },
     toggleFilterModal () {
-    filterModal.classList.toggle("active")
+        filterModal.classList.toggle("active")
+    },
+    toogleEditModal () {
+        editModal.classList.toggle("active")
     },
     toggleFilterTypeOption (type) {
-    const desactiveTypes = filterTypeOptions.filter(element => element !== type)
-    desactiveTypes.map(e => e.classList.remove("activated"))
-    type.classList.add("activated")
+        const desactiveTypes = filterTypeOptions.filter(element => element !== type)
+        desactiveTypes.map(e => e.classList.remove("activated"))
+        type.classList.add("activated")
     }
 }
 
@@ -95,6 +99,11 @@ const Transaction = {
     },
     remove (index) {
         this.all = this.all.filter(element => element.id !== index)
+        App.reload()
+    },
+    update (data) {
+        const index = Transaction.all.findIndex(element => element.id === data.id)
+        Transaction.all[index] = data
         App.reload()
     },
     incomes(data) {
@@ -198,7 +207,10 @@ const Utils = {
     unformatDate (date) {
         const splittedDate = date.split("/")
         return `${splittedDate[2]}-${splittedDate[1]}-${splittedDate[0]}`
-    }
+    },
+    unformatAmount (value) {
+        return Math.round(value/100)
+    },
 
 }
 
@@ -318,6 +330,36 @@ const Filter = {
             alert(error.message)
             console.log(error)
         }
+    },
+}
+const Edit = {
+    description: document.querySelector("#editDescription"),
+    amount: document.querySelector("#editAmount"),
+    date: document.querySelector("#editDate"),
+    editForm: document.querySelector("#editForm"),
+    setModal (id) {
+        const transaction = Transaction.all.find(element => element.id === id)
+        this.description.value = transaction.description
+        this.amount.value = Utils.unformatAmount(transaction.amount)
+        this.date.value = Utils.unformatDate(transaction.date)
+
+        toggles.toogleEditModal()
+        this.editForm.addEventListener("submit", event => {
+            Edit.submit(id, event)
+        })
+    },
+    submit (id, event) {
+        event.preventDefault()
+
+        const { description, amount, date} = Edit
+        const data = {
+            id,
+            description: description.value,
+            amount: Utils.formatAmount(amount.value),
+            date: Utils.formatDate(date.value)
+        }
+        toggles.toogleEditModal()
+        Transaction.update(data)
     },
 }
 

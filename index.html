@@ -113,6 +113,36 @@
             </div>
         </div>
     </div>
+    <div class="modal-overlay" id="editTransactionModal">
+        <div class="modal">
+            <div id="form">
+                <h2>Editar Transação</h2>
+                <form action="" id="editForm">
+                   <div class="input-group">
+                       <label class="sr-only" for="editDescription">Descrição</label>
+                       <input type="text" id="editDescription" name="description" placeholder="Descrição">
+                   </div>
+
+                   <div class="input-group">
+                        <label class="sr-only" for="editAmount">Valor</label>
+                        <input type="number" id="editAmount" name="amount" step="0.01" placeholder="0,00">
+                    </div>        
+                    
+                    <small class="help">Use o sinal - (negativo) para despesas e , (vírgula) para casas decimais</small>
+
+                    <div class="input-group">
+                        <label class="sr-only" for="editDate">Data</label>
+                        <input type="date" id="editDate" name="date" max="2999-01-01">
+                    </div>
+
+                    <div class="input-group action">
+                        <a href="#" class="button cancel" id="editCancel" onclick="toggles.toogleEditModal()">Cancelar</a>
+                        <button>Salvar</button>
+                    </div> 
+                </form>
+            </div>
+        </div>
+    </div>
 
     <div class="modal-overlay" id="filterModal">
         <div class="modal">
