@@ -53,6 +53,8 @@ const Card = {
 
 const deafultDataFilter = {
     type: 'filterAll',
+    initialDate: '',
+    finishDate: ''
 }
 
 const StorageInterface = {
@@ -116,6 +118,7 @@ const Transaction = {
 
 const DOM = {
     trasnsactionsConteiner : document.querySelector("#data-table tbody"),
+    filterDisplay: document.querySelector(".filterDisplay"),
     addTransaction (transaction, index) {
         const tr = document.createElement("tr")
         tr.innerHTML = DOM.innerHTMLTransaction(transaction, index)
@@ -135,6 +138,23 @@ const DOM = {
                 <a href="#" onclick="Transaction.remove(${transaction.id})"><img src="./assets/minus.svg" alt="Botão Excluir"></a>
             </td>`
         return html    
+    },
+    addFilter () {
+        const divElement = document.createElement("div")
+        divElement.setAttribute("class", "filterContent")
+        const data = DOM.innerHTMLFilter()
+        divElement.innerHTML = data
+        
+        DOM.filterDisplay.appendChild(divElement)
+    },
+    innerHTMLFilter () {
+        const html = `
+         <small>
+            Filter
+        </small>
+        <a href="#" onclick="Filter.setNull()"><img src="./assets/filterDesactive.svg" alt=""></a>
+        `
+        return html
     },
     updateBalance (data) {
         incomeDisplay.innerHTML = Utils.formatCurrency(Transaction.incomes(data))
@@ -236,6 +256,11 @@ const Filter = {
     finishDate () { return document.querySelector("#finish-date").value },
     currentType () { return document.querySelector(".activated").attributes.id.value },
 
+    setNull () {
+        StorageInterface.setDataType(deafultDataFilter)
+        DOM.filterDisplay.innerHTML = ""
+        App.reload()
+    },
     filterType (type) {
         let filteredType = []
         if (type === "filterIncome"){
@@ -258,7 +283,9 @@ const Filter = {
     },
     filterTransactions () {
         const data = StorageInterface.getDataType()
-
+        if(JSON.stringify(data) !== JSON.stringify(deafultDataFilter)){
+            DOM.addFilter()
+        }
         let filtered = this.filterType(data.type)
         filtered = this.filterDate(filtered, data.initialDate, data.finishDate)
 
@@ -285,7 +312,7 @@ const Filter = {
             alert(error.message)
             console.log(error)
         }
-    }
+    },
 }
 
 const App = {
@@ -309,6 +336,5 @@ const App = {
     },
 
 }
-
 
 App.init()

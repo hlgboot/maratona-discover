@@ -346,21 +346,53 @@ html.transition *:after {
     justify-content: space-between;
 }
 .features {
+    width: 150px;
     height: 30px;
+    display: flex;
+    justify-content: end;
+    align-items: center;
+}
+
+.filterContent {
+    background: rgba(233, 41, 41, 0.2 );
+    color: var(--red);
+    height: 20px;
+    width: 70px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-right: 10px;
+
+}
+
+.filterContent small {
+    margin-left: 10px;
+    font-size: 12px;
+}
+.filterContent a {
+    margin: 0px 5px 5px;
+    height: 15px;
+}
+
+.featuresButton {
     width: 70px;
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
-.features button {
+.featuresButton button {
     margin: 0;
     padding: 0;
     background: none;
     width: 30px;
     height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     border-radius: 2px;
 }
-.features button:hover {
+.featuresButton button:hover {
     background: #ccc;
 }
 
