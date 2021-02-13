@@ -144,6 +144,9 @@ const DOM = {
             <td class="${CSSclass}">${amount}</td>
             <td class="transaction-date">${transaction.date}</td>
             <td>
+                <a href="#" onclick="Edit.setModal(${transaction.id})"><img src="./assets/editIcon.svg" alt="Botão  Editar"></a>
+            </td>
+            <td>
                 <a href="#" onclick="Transaction.remove(${transaction.id})"><img src="./assets/minus.svg" alt="Botão Excluir"></a>
             </td>`
         return html    
@@ -328,7 +331,6 @@ const Filter = {
             toggles.toggleFilterModal()
         } catch (error) {
             alert(error.message)
-            console.log(error)
         }
     },
 }
@@ -336,21 +338,19 @@ const Edit = {
     description: document.querySelector("#editDescription"),
     amount: document.querySelector("#editAmount"),
     date: document.querySelector("#editDate"),
-    editForm: document.querySelector("#editForm"),
+    saveEditButton: document.querySelector("#saveEdit"),
     setModal (id) {
-        const transaction = Transaction.all.find(element => element.id === id)
+        const transaction = Transaction.all.filter(element => element.id === id)[0]
         this.description.value = transaction.description
         this.amount.value = Utils.unformatAmount(transaction.amount)
         this.date.value = Utils.unformatDate(transaction.date)
 
         toggles.toogleEditModal()
-        this.editForm.addEventListener("submit", event => {
-            Edit.submit(id, event)
+        this.saveEditButton.addEventListener("click", e => {
+            Edit.submit(id)
         })
     },
-    submit (id, event) {
-        event.preventDefault()
-
+    submit (id) {
         const { description, amount, date} = Edit
         const data = {
             id,
@@ -358,8 +358,11 @@ const Edit = {
             amount: Utils.formatAmount(amount.value),
             date: Utils.formatDate(date.value)
         }
-        toggles.toogleEditModal()
         Transaction.update(data)
+        this.saveEditButton.removeEventListener("click", e => {
+            Edit.submit(id)
+        })
+        toggles.toogleEditModal()
     },
 }
 
