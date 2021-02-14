@@ -214,6 +214,24 @@ const Utils = {
     unformatAmount (value) {
         return Math.round(value/100)
     },
+    getLowerDate (data) {
+        let lowerDate
+        data.map((e, index) => {
+            if (Utils.unformatDate(e.date) < lowerDate || index == 0){
+                lowerDate = e.date
+            }
+        })
+        return lowerDate
+    },
+    getBiggerDate (data) {
+        let biggerDate
+        data.map((e, index) => {
+            if (Utils.unformatDate(e.date) > biggerDate || index == 0){
+                biggerDate = e.date
+            }
+        })
+        return biggerDate
+    }
 
 }
 
@@ -334,6 +352,7 @@ const Filter = {
         }
     },
 }
+
 const Edit = {
     description: document.querySelector("#editDescription"),
     amount: document.querySelector("#editAmount"),
@@ -364,6 +383,48 @@ const Edit = {
         })
         toggles.toogleEditModal()
     },
+}
+
+const Download = {
+    filterExercise () {
+        const dataFilter = StorageInterface.getDataType()
+        const data = Filter.filterDate(Transaction.all, dataFilter.initialDate, dataFilter.finishDate)
+        return {
+            transactions: data,
+            initialDate: dataFilter.initialDate,
+            finishDate: dataFilter.finishDate
+        }
+    },
+    getContent () {
+        const data = Download.filterExercise()
+        if (data.initialDate === "") { data.initialDate = Utils.getLowerDate(data.transactions)}
+        if (data.finishDate === "") { data.finishDate = Utils.getBiggerDate(data.transactions)}
+        let content = 
+            `Extrato ${data.initialDate} - ${data.finishDate}\n\nSaídas    = ${Utils.formatCurrency(Transaction.expenses(data.transactions))}\nEntradas  = ${Utils.formatCurrency(Transaction.incomes(data.transactions))}\nTotal     = ${Utils.formatCurrency(Transaction.total(data.transactions))}\n\n\ `
+        
+        data.transactions.map(e => {
+        content += `${e.description} ${"-".repeat((15-e.description.length))} ${e.date} = ${Utils.formatCurrency(e.amount)}\n `
+        })
+        return content
+    },
+    generateFile () {
+        try {
+            const data = Download.getContent()
+            const blob = new Blob ([data], {
+                type: "aplication/text"
+            })
+            const url = URL.createObjectURL(blob)
+            const link = document.createElement("a")
+            link.setAttribute("href", url)
+            link.setAttribute("download", "devExtract.txt")
+            
+            document.body.appendChild(link);
+            link.click()
+            document.body.removeChild(link)            
+        } catch (error) {
+            console.log(error)
+        }
+    }
 }
 
 const App = {
