@@ -214,25 +214,6 @@ const Utils = {
     unformatAmount (value) {
         return Math.round(value/100)
     },
-    getLowerDate (data) {
-        let lowerDate
-        data.map((e, index) => {
-            if (e.date < lowerDate || index == 0){
-                lowerDate = e.date
-            }
-        })
-        return lowerDate
-    },
-    getBiggerDate (data) {
-        let biggerDate
-        data.map((e, index) => {
-            if (e.date > biggerDate || index == 0){
-                biggerDate = e.date
-            }
-        })
-        return biggerDate
-    }
-
 }
 
 const Form = {
@@ -315,6 +296,7 @@ const Filter = {
         if (finishDate) {
             filtered = filtered.filter(element => Utils.unformatDate(element.date) <= finishDate)
         }
+        filtered.sort((a, b) => a.date > b.date)
         return filtered
     },
     filterTransactions () {
@@ -398,8 +380,8 @@ const Download = {
     getContent () {
         const data = Download.filterExercise()
         if (JSON.stringify(data.transactions) === JSON.stringify([])) { throw new Error("Nenhuma transação foi adicionada")}
-        if (data.initialDate === "") { data.initialDate = Utils.getLowerDate(data.transactions)}
-        if (data.finishDate === "") { data.finishDate = Utils.getBiggerDate(data.transactions)}
+        if (data.initialDate === "") { data.initialDate = data.transactions[0].date}
+        if (data.finishDate === "") { data.finishDate = data.transactions[data.transactions.length -1].date}
         let content = ""
 
         content += `Extrato, ${data.initialDate}, ${data.finishDate},\n\n`
