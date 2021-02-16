@@ -217,7 +217,7 @@ const Utils = {
     getLowerDate (data) {
         let lowerDate
         data.map((e, index) => {
-            if (Utils.unformatDate(e.date) < lowerDate || index == 0){
+            if (e.date < lowerDate || index == 0){
                 lowerDate = e.date
             }
         })
@@ -226,7 +226,7 @@ const Utils = {
     getBiggerDate (data) {
         let biggerDate
         data.map((e, index) => {
-            if (Utils.unformatDate(e.date) > biggerDate || index == 0){
+            if (e.date > biggerDate || index == 0){
                 biggerDate = e.date
             }
         })
@@ -397,13 +397,20 @@ const Download = {
     },
     getContent () {
         const data = Download.filterExercise()
+        if (JSON.stringify(data.transactions) === JSON.stringify([])) { throw new Error("Nenhuma transação foi adicionada")}
         if (data.initialDate === "") { data.initialDate = Utils.getLowerDate(data.transactions)}
         if (data.finishDate === "") { data.finishDate = Utils.getBiggerDate(data.transactions)}
-        let content = 
-            `Extrato ${data.initialDate} - ${data.finishDate}\n\nSaídas    = ${Utils.formatCurrency(Transaction.expenses(data.transactions))}\nEntradas  = ${Utils.formatCurrency(Transaction.incomes(data.transactions))}\nTotal     = ${Utils.formatCurrency(Transaction.total(data.transactions))}\n\n\ `
-        
+        let content = ""
+
+        content += `Extrato, ${data.initialDate}, ${data.finishDate},\n\n`
+        content += `Entradas, "${Utils.formatCurrency(Transaction.incomes(data.transactions))}",\n`
+        content += `Saídas, "${Utils.formatCurrency(Transaction.expenses(data.transactions))}",\n`
+        content += `Total, "${Utils.formatCurrency(Transaction.total(data.transactions))}",\n\n`
+        content += `Descrição, Data, Valor, \n`
+
         data.transactions.map(e => {
-        content += `${e.description} ${"-".repeat((15-e.description.length))} ${e.date} = ${Utils.formatCurrency(e.amount)}\n `
+            const row = `${e.description}, ${e.date}, "${Utils.formatCurrency(e.amount)}"`
+            content += row + "," + "\n"
         })
         return content
     },
@@ -411,18 +418,18 @@ const Download = {
         try {
             const data = Download.getContent()
             const blob = new Blob ([data], {
-                type: "aplication/text"
+                type: "aplication/csv"
             })
             const url = URL.createObjectURL(blob)
             const link = document.createElement("a")
             link.setAttribute("href", url)
-            link.setAttribute("download", "devExtract.txt")
+            link.setAttribute("download", "devExtract.csv")
             
             document.body.appendChild(link);
             link.click()
             document.body.removeChild(link)            
         } catch (error) {
-            console.log(error)
+            alert(error.message)
         }
     }
 }
