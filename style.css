@@ -11,11 +11,11 @@
     --light-green: #13D510;
 }
 .dark-theme {
-    --bg: #202024;
+    --bg: #1a1a1d;
     --font-color: #fff;
     --footer: #fff;
-    --header: #121214;
-    --primary-color: #1c1c1c;
+    --header: #0E0E11;
+    --primary-color: #151515;
 }
 * {
     margin: 0;
