@@ -6,7 +6,7 @@
         Matheus Henriques | Rocketseat
     </h2>
     <p>
-        Projeto envolvendo finanças pessoais desenvolvido por Maik Brito durante a Maratona Discover da Rocketseat.
+        Projeto envolvendo finanças pessoais desenvolvido por Mayk Brito durante a Maratona Discover da Rocketseat.
     </p>
     <p>
         Este repositório contém as alterações e implementações feitas por mim no projeto. 
@@ -16,7 +16,7 @@
 </hr>
 
 <h4 align="center">
-    🚧  Projeto 🚀 Em construção...  🚧
+    🚧  Projeto Em desenvolvimento...  🚧
 </h4>
 </hr>
 
@@ -31,7 +31,7 @@
     <a href="#filter"> Filtro</a> |
     <a href="#edit"> Edição de Transações</a>
   </h4>
-  <p align="left">Aqui estão algumas demonstrações das funcionalidades implementadas no projeto.</p>
+  <p align="center">Aqui estão algumas demonstrações das funcionalidades implementadas no projeto.</p>
 </div>
 <hr/>
 
